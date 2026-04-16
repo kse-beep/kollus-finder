@@ -195,26 +195,20 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--surface)
 
 
 /* inquiry form */
-.inquiry-form{margin-top:2rem;padding:1.75rem;background:var(--blue-50);border:1.5px solid var(--blue-200);border-radius:var(--radius-xl)}
-.inquiry-form-title{font-size:17.9px;font-weight:700;color:var(--blue-900);margin-bottom:.4rem}
-.inquiry-form-sub{font-size:13.9px;color:var(--blue-700);margin-bottom:1.5rem;line-height:1.6}
-.iq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-.iq-field{display:flex;flex-direction:column;gap:5px}
-.iq-field.full{grid-column:1/-1}
-.iq-label{font-size:12.8px;font-weight:600;color:var(--blue-900)}
-.iq-label span{color:var(--coral-500);margin-left:2px}
-.iq-input{padding:10px 14px;border-radius:var(--radius-md);border:1.5px solid var(--blue-200);background:#fff;font-family:'Pretendard',sans-serif;font-size:14.4px;color:var(--text-primary);transition:border-color .15s;outline:none}
-.iq-input:focus{border-color:var(--blue-500)}
-.iq-input::placeholder{color:var(--text-hint)}
-.iq-textarea{resize:vertical;min-height:100px;line-height:1.6}
-.iq-readonly{background:var(--blue-50);color:var(--blue-700);cursor:default}
-.iq-submit{width:100%;margin-top:1rem;padding:14px 24px;border-radius:var(--radius-md);font-size:16.7px;font-weight:700;background:var(--blue-500);color:#fff;border:none;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s}
-.iq-submit:hover{background:var(--blue-700)}
-.iq-submit:disabled{opacity:.4;cursor:not-allowed}
-.iq-notice{font-size:12.2px;color:var(--blue-700);margin-top:.75rem;text-align:center;opacity:.8}
-.iq-success{display:none;text-align:center;padding:2rem;color:var(--green-700);font-size:15.8px;font-weight:600}
-.iq-success::before{content:'✓  '}
-@media(max-width:600px){.iq-grid{grid-template-columns:1fr}}
+.inquiry-form{margin-top:2rem;padding:2rem;background:var(--blue-50);border:1.5px solid var(--blue-200);border-radius:var(--radius-xl)}
+.inquiry-form-title{font-size:26px;font-weight:700;color:var(--blue-900);margin-bottom:.6rem}
+.inquiry-form-sub{font-size:16px;color:var(--blue-700);margin-bottom:1.5rem;line-height:1.7}
+.inquiry-cols{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start}
+.prefill-box{background:#fff;border:1.5px solid var(--blue-200);border-radius:var(--radius-lg);overflow:hidden}
+.prefill-box-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--blue-50);border-bottom:1px solid var(--blue-200)}
+.prefill-box-label{font-size:13.6px;font-weight:600;color:var(--blue-700)}
+.prefill-copy-btn{padding:7px 18px;border-radius:var(--radius-sm);background:var(--blue-500);color:#fff;border:none;font-size:13.6px;font-weight:600;cursor:pointer;font-family:'Pretendard',sans-serif;transition:background .15s;white-space:nowrap}
+.prefill-copy-btn:hover{background:var(--blue-700)}
+.prefill-content{padding:16px;font-size:14px;color:var(--text-secondary);line-height:1.9;white-space:pre-wrap;font-family:'Pretendard',sans-serif;margin:0;min-height:200px}
+.prefill-copied{display:none;font-size:13.2px;color:var(--green-700);font-weight:600;padding:8px 16px;background:var(--green-50);border-top:1px solid var(--green-500);text-align:center}
+.pd-form-wrap{width:100%;max-width:100%}
+.inquiry-section{margin-top:1.5rem}
+@media(max-width:800px){.inquiry-cols{grid-template-columns:1fr}}
 /* industry context bar */
 .ind-context{display:none;align-items:center;gap:10px;padding:10px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:1.25rem;animation:fadeUp .2s ease}
 .ind-context.visible{display:flex}
@@ -346,6 +340,29 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--surface)
     <div class="nav">
       <button class="btn" onclick="goStep(2)">← 조건 수정</button>
       <button class="btn btn-reset" onclick="reset()">처음부터 다시</button>
+    </div>
+  </div>
+
+  <!-- 견적 문의 영역 (파이프드라이브 웹폼) -->
+  <div class="inquiry-section" id="inquiry-section" style="display:none">
+    <div class="inquiry-form">
+      <div class="inquiry-form-title">견적 문의하기</div>
+      <div class="inquiry-form-sub">선택하신 조건을 복사해서 문의 내용란에 붙여넣어 주세요. 담당자가 빠르게 확인합니다.</div>
+      <div class="inquiry-cols">
+        <!-- 왼쪽: 선택 조건 복사 -->
+        <div class="prefill-box">
+          <div class="prefill-box-header">
+            <span class="prefill-box-label">📋 선택하신 조건 — 복사 후 붙여넣기</span>
+            <button class="prefill-copy-btn" onclick="copyPrefill()">복사하기</button>
+          </div>
+          <pre class="prefill-content" id="prefill-content"></pre>
+          <div class="prefill-copied" id="prefill-copied">✓ 복사되었습니다</div>
+        </div>
+        <!-- 오른쪽: 파이프드라이브 웹폼 -->
+        <div class="pd-form-wrap">
+          <div class="pipedriveWebForms" data-pd-webforms="https://webforms.pipedrive.com/f/1tgdA9o87kotVaCRBf8cDwNi0X9oUUMVHOWcVzKi1KgnqdCbGH0spcWwxsQPufFfB"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -754,6 +771,7 @@ function goStep(n){
   updateContextBar(n);
   if(n===2) renderStep2();
   if(n===3) renderResults();
+  else document.getElementById("inquiry-section").style.display="none";
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -841,28 +859,6 @@ function toggleAc(id){
 }
 
 
-function handleIqSubmit(e){
-  e.preventDefault();
-  const form=document.getElementById("iq-form");
-  const btn=form.querySelector(".iq-submit");
-  btn.disabled=true; btn.textContent="전송 중...";
-  const data=new FormData(form);
-  fetch(form.action,{method:"POST",body:data,headers:{"Accept":"application/json"}})
-    .then(r=>{
-      if(r.ok){
-        form.style.display="none";
-        document.getElementById("iq-success").style.display="block";
-      } else {
-        btn.disabled=false; btn.textContent="문의 보내기 →";
-        alert("전송 중 오류가 발생했습니다. 다시 시도해 주세요.");
-      }
-    })
-    .catch(()=>{
-      btn.disabled=false; btn.textContent="문의 보내기 →";
-      alert("네트워크 오류가 발생했습니다. 다시 시도해 주세요.");
-    });
-}
-
 function buildInquiryMailto(scored){
   const indLabel=INDUSTRIES.find(i=>i.id===st.ind)?.label||"";
   const ucList=scored.map((x,i)=>""+(i+1)+". "+x.u.name).join("\n");
@@ -938,50 +934,43 @@ function renderResults(){
 
   html+='</div>';
   const indLabel2=INDUSTRIES.find(i=>i.id===st.ind)?.label||"";
-  const ucSummary=top3.map((x,i)=>(i+1)+". "+x.u.name).join("\n");
   const sitSummary=st.sits.length?st.sits.map(s=>"- "+s).join("\n"):"(선택 없음)";
+  const prefillMsg="[선택 산업]\n"+indLabel2+"\n\n[선택 상황 / 니즈]\n"+sitSummary;
 
-  html+=`
-<div class="inquiry-form" id="inquiry-form">
-  <div class="inquiry-form-title">견적 문의하기</div>
-  <div class="inquiry-form-sub">선택하신 솔루션 정보가 자동으로 입력됩니다. 연락처를 입력하고 문의 내용을 보내주세요.</div>
-  <form id="iq-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="handleIqSubmit(event)">
-    <input type="hidden" name="선택_산업" value="${indLabel2}">
-    <input type="hidden" name="선택_상황" value="${sitSummary}">
-    <input type="hidden" name="매칭_유스케이스" value="${ucSummary}">
-    <div class="iq-grid">
-      <div class="iq-field">
-        <label class="iq-label">이름<span>*</span></label>
-        <input class="iq-input" type="text" name="이름" placeholder="홍길동" required>
-      </div>
-      <div class="iq-field">
-        <label class="iq-label">회사명<span>*</span></label>
-        <input class="iq-input" type="text" name="회사명" placeholder="(주)카테노이드" required>
-      </div>
-      <div class="iq-field">
-        <label class="iq-label">이메일<span>*</span></label>
-        <input class="iq-input" type="email" name="이메일" placeholder="example@company.com" required>
-      </div>
-      <div class="iq-field">
-        <label class="iq-label">연락처</label>
-        <input class="iq-input" type="tel" name="연락처" placeholder="010-0000-0000">
-      </div>
-      <div class="iq-field full">
-        <label class="iq-label">선택하신 산업 / 상황</label>
-        <textarea class="iq-input iq-textarea iq-readonly" readonly>${indLabel2}\n${sitSummary}</textarea>
-      </div>
-      <div class="iq-field full">
-        <label class="iq-label">문의 내용</label>
-        <textarea class="iq-input iq-textarea" name="문의내용" placeholder="궁금하신 점이나 요구 사항을 자유롭게 작성해 주세요."></textarea>
-      </div>
-    </div>
-    <button class="iq-submit" type="submit">문의 보내기 →</button>
-    <p class="iq-notice">biz@catenoid.net 으로 전달됩니다</p>
-  </form>
-  <div class="iq-success" id="iq-success">문의가 접수되었습니다! 빠른 시일 내에 연락드리겠습니다.</div>
-</div>`;
   area.innerHTML=html;
   if(scored.length) document.getElementById("ac-"+scored[0].u.id)?.classList.add("open");
+
+  /* 선택 내용 prefill 박스 업데이트 */
+  const prefillEl=document.getElementById("prefill-content");
+  if(prefillEl) prefillEl.textContent=prefillMsg;
+  /* 파이프드라이브 폼 재초기화 */
+  const pdDiv=document.querySelector(".pipedriveWebForms");
+  if(pdDiv && !pdDiv.querySelector("iframe")){
+    const s=document.createElement("script");
+    s.src="https://webforms.pipedrive.com/f/loader";
+    document.body.appendChild(s);
+  }
+  document.getElementById("inquiry-section").style.display="block";
+}
+
+function copyPrefill(){
+  const el=document.getElementById("prefill-content");
+  if(!el) return;
+  navigator.clipboard.writeText(el.innerText).then(()=>{
+    const msg=document.getElementById("prefill-copied");
+    msg.style.display="block";
+    setTimeout(()=>msg.style.display="none",2500);
+  }).catch(()=>{
+    const range=document.createRange();
+    range.selectNode(el);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
+    window.getSelection().removeAllRanges();
+    const msg=document.getElementById("prefill-copied");
+    msg.style.display="block";
+    setTimeout(()=>msg.style.display="none",2500);
+  });
 }
 
 function clearSits(){
@@ -996,6 +985,7 @@ function reset(){
   curTab="vod"; switchTab("vod");
   renderStep1(); goStep(1);
   document.getElementById("ind-context").classList.remove("visible");
+  document.getElementById("inquiry-section").style.display="none";
 }
 
 renderStep1();
